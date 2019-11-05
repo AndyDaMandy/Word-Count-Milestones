@@ -65,8 +65,64 @@ function displayTarget (){
 // It the needs to check for milestones.
 // It possibly needs to be able to check dates and see if you're on track
 let wordsPerDay = 0;
-function wordsPerDay(x){
+function wordsPerDayF(x){
 wordsPerDay = x / 30;
+wordsPerDay = Math.round(wordsPerDay)
+document.getElementById('wordsNeeded').innerHTML = wordsPerDay.toString();
 };
+
+// wordsPerDay(parseInt(window.localStorage.getItem('savedTarget')));
+// This function above is how we're going to pull the data from the target
+// I think I can also add 
+
+//Next up is milestones
+// It needs to see if you hit a milestone or not...
+// The ul tags calendar need to create list elements containing an approximate day count
+let milestones = []
+let finalMilestones = [];
+function createMilestones(){
+  let newWordCount = wordsPerDay;
+for (let w = 1; w <= 30; w++){
+  milestones.push(newWordCount * w)
+};
+let count = 1;
+for (let z = 0; z < milestones.length; z++){
+  finalMilestones.push("Day " + count + ": " + milestones[z]);
+  count++;
+};
+};
+function final(){
+document.getElementById("wordsNeeded").innerHTML = "";
+milestones = [];
+finalMilestones = [];
+wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')));
+createMilestones();
+let str = '<ul>'
+finalMilestones.forEach(function(item) {
+  str += '<li>'+ item + '</li>';
+}); 
+str += '</ul>';
+document.getElementById("wordsNeeded").innerHTML = str;
+};
+// These functions show the days in and save it
+let todaysDate = window.localStorage.getItem("date")
+function saveTheDate(){
+  let findDate = document.getElementById("currentDay").value;
+  window.localStorage.setItem("date", findDate.toString());
+};
+function showTheDate(){
+  saveTheDate();
+  document.getElementById("daysIn").innerHTML = todaysDate.toString();
+};
+
+// Checking the dates is up next
+function winner(){
+  let checkWinner = parseInt(todaysDate) * parseInt(wordsPerDay);
+  if (parseInt(saved)  == checkWinner){
+    document.getElementById("goodJob").innerHTML = "Good Job hitting your wordcount! You're the best!";
+  };
+};
+
+// 
 
 //
