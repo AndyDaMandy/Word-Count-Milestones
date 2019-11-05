@@ -6,19 +6,25 @@
     <title>repl.it</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
-  <body onload="checkSaved(); checkTarget();">
-    <h1>Wordcount Site<h2>
+  <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); showTheDate(); winner();">
+    <h1>Write a novel in 30 days - Word Count Site<h2>
       <p>What's your target word count at the end of 30 days?</p>
-      <input type="number" id="target" onChange="askTarget(); checkTarget();"></input>
+      <input type="number" id="target" onChange="askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final();"></input>
       <input type="submit">
       <p id="finalTarget"></p>
       <p>What's your current word count?</p>
-    <input type="number" id="wordCount" onChange="updateCount(); checkSaved();"></input>
+    <input type="number" id="wordCount" onChange="updateCount(); checkSaved(); winner();"></input>
     <input type="submit" onClick="displayCount();">
     <p>Your current word count is:</p>
     <p id="total"></p>
+    <p>How many days in are you?</p>
+    <input type="number" id="currentDay" onChange="showTheDate();saveTheDate(); winner();"></input>
+    <input type="submit" onChange="showTheDate(); saveTheDate(); winner();"></input>
+    <p id="daysIn"></p>
+    <p id="goodJob"></p>
+    <p id="neededForDay"></p>
     <p>Words needed per day:</p>
-    <p id="wordsNeeded"></p>
+    <div id="wordsNeeded"></div>
     <script src="script.js"></script>
   </body>
 </html>
