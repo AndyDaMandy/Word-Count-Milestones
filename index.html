@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body onload="checkSaved(); checkTarget();">
+    <h1>Wordcount Site<h2>
+      <p>What's your target word count at the end of 30 days?</p>
+      <input type="number" id="target" onChange="askTarget(); checkTarget();"></input>
+      <input type="submit">
+      <p id="finalTarget"></p>
+      <p>What's your current word count?</p>
+    <input type="number" id="wordCount" onChange="updateCount(); checkSaved();"></input>
+    <input type="submit" onClick="displayCount();">
+    <p>Your current word count is:</p>
+    <p id="total"></p>
+    <p>Words needed per day:</p>
+    <p id="wordsNeeded"></p>
+    <script src="script.js"></script>
+  </body>
+</html>
