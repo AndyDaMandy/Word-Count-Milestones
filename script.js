@@ -2,7 +2,7 @@
 // It needs to store a wordcount
 // It needs to update the wordcount easily
 // It needs to have milestones
-// it needs to know if you made it
+// it needs to tell users if they hit the goal
 
 let wordCount = 0;
 let target = 0;
@@ -104,25 +104,108 @@ finalMilestones.forEach(function(item) {
 str += '</ul>';
 document.getElementById("wordsNeeded").innerHTML = str;
 };
+
 // These functions show the days in and save it
-let todaysDate = window.localStorage.getItem("date")
-function saveTheDate(){
-  let findDate = document.getElementById("currentDay").value;
-  window.localStorage.setItem("date", findDate.toString());
-};
-function showTheDate(){
-  saveTheDate();
-  document.getElementById("daysIn").innerHTML = todaysDate.toString();
+let originalDate = 0;
+let todaysDate = window.localStorage.getItem("date");
+
+function saveDate(){
+  originalDate = document.getElementById("currentDay").value;
+  window.localStorage.setItem("date", originalDate.toString());
 };
 
-// Checking the dates is up next
+function checkDate(){
+  let newDate = parseInt(todaysDate);
+  if (newDate !== 0){
+    showDate();
+  }
+};
+
+function showDate(){
+  todaysDate = window.localStorage.getItem("date");
+  let showingDate = window.localStorage.getItem("date");
+  parseInt(showingDate);
+  document.getElementById('daysIn').innerHTML = "Days In: " + showingDate;
+};
+
+// Checking the dates for winners is up next
 function winner(){
-  let checkWinner = parseInt(todaysDate) * parseInt(wordsPerDay);
-  if (parseInt(saved)  == checkWinner){
-    document.getElementById("goodJob").innerHTML = "Good Job hitting your wordcount! You're the best!";
+  document.getElementById('goodJob').innerHTML = "";
+  let checkWinner = wordsPerDay * todaysDate;
+  let checkRemainder = checkWinner - saved;
+  document.getElementById('remainder').innerHTML = "";
+  if (saved  >= checkWinner){
+    document.getElementById('goodJob').innerHTML = "Good Job hitting your word count! You're the best!";
+    document.getElementById('remainder').innerHTML = "Words over: " + Math.abs(checkRemainder);
+  } else {
+    document.getElementById('remainder').innerHTML = "Words left to go: " + checkRemainder;
+    document.getElementById('goodJob').innerHTML = "Still got more to go! Keep on going!"
+
+  }
+};
+// This next section will reward with milestones
+// Each milestone be every 5k. I.E. you get a "prize" for hitting 10k, 15k, 20k, etc.
+// I'll probably put an upper limit of some sort. Not sure what kind, but it'll happen. 
+// The reward will consist probably of styling OR pictures of cute dogs
+function fiveK(){
+  document.getElementById('milestones').innerHTML = "";
+  let checkinterval = Math.round(wordCount / 5000);
+  let five = checkinterval * 5000;
+  if (wordCount >= targeted) {
+    document.getElementById('milestones').innerHTML = "Congratulations on finishing! you hit your target word count! Buy yourself a drink! You deserve it!";
+    pushPup();
+  } else if (wordCount >= 5000){
+  document.getElementById('milestones').innerHTML = "You hit " + five + " words! Congratulations! Keep it up! Here's a puppy!";
+    pushPup();
+  } else {
+    document.getElementById('cute').src = "";
+  };
+
+};
+
+// Rewards next?
+// I'll probably have to modify the current functions to do that
+// I'll also probably want to clean up some of this code too.
+// This could be a good opportunity to working styling it a bit too.
+// The rewards will probably be images. I'll need to host them or possibly pull a random one from imgur or something.
+// I actually like the idea of pulling from imgur, but that's a bit harder.
+// As per sensei's idea, I'll be using an XMLHTTP request.
+// I'll also be using the imgur and reddit api to bring this to life
+// this is probably the most technically challenging thing I've done
+//This variable "randomPup" will store the puppy image puppyFinder
+// Then the function pushPup will be called if a milestone is hit.
+let randomPup;
+let puppyFinder = new XMLHttpRequest();
+//Begins the function once the xmlhttp request state changes...
+puppyFinder.onreadystatechange = function(){
+// once it's considered done, it converts the JSON string to an object
+// The object is then passed into the global variable randomPup
+  if (puppyFinder.readyState === XMLHttpRequest.DONE){
+  let json = JSON.parse(puppyFinder.response);
+  randomPup = json;
   };
 };
+// This is where the html request is pulling from.
+// I don't totally understand the syntax yet
+// I need to do more research on xmlhttp requiests
+// .open seems to decide where to pull from
+puppyFinder.open("GET", "https://api.imgur.com/3/gallery/r/puppies/hot/day/1", true);
+// .setRequestHEader Seems to set up authorization, but how? Where does the client ID come from?
+puppyFinder.setRequestHeader ("Authorization", "Client-ID 2c2895992633e8c");
+// .send() initializes the request
+puppyFinder.send();
 
+function pushPup(){
+// This removes the "hidden" class from the img element.
+  document.getElementById('cute').classList = "";
+  // The randomPup object should only be 100 items, so this pulls a random item from 1-100.
+  // It could be good to re-roll if it loads something wrong..
+document.getElementById('cute').src = randomPup.data[Math.floor(Math.random() * 201) - 100].link;
+};
+
+// I'd love to find a way to get the image to load before it appears.
+// Or to have it queued up before the next change. Maybe have a second one ready? I.E. two variables....hrmmmm
+// Might require some playing around with regarding the order of operations.
 // 
 
 //
