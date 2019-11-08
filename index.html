@@ -6,22 +6,26 @@
     <title>repl.it</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
-  <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); showTheDate(); winner();">
+  <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); showDate(); winner(); fiveK();">
     <h1>Write a novel in 30 days - Word Count Site<h2>
       <p>What's your target word count at the end of 30 days?</p>
-      <input type="number" id="target" onChange="askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final();"></input>
+      <input type="number" id="target" onchange="askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); winner();"></input>
       <input type="submit">
       <p id="finalTarget"></p>
       <p>What's your current word count?</p>
-    <input type="number" id="wordCount" onChange="updateCount(); checkSaved(); winner();"></input>
-    <input type="submit" onClick="displayCount();">
+    <input type="number" id="wordCount" onchange="updateCount(); checkSaved(); saveDate(); showDate(); winner(); fiveK();"></input>
+    <input type="submit">
     <p>Your current word count is:</p>
     <p id="total"></p>
     <p>How many days in are you?</p>
-    <input type="number" id="currentDay" onChange="showTheDate();saveTheDate(); winner();"></input>
-    <input type="submit" onChange="showTheDate(); saveTheDate(); winner();"></input>
+    <input type="number" id="currentDay" onchange="saveDate(); saveDate(); showDate(); winner();"></input>
+    <input type="submit" ></input>
     <p id="daysIn"></p>
     <p id="goodJob"></p>
+    <p id="remainder"></p>
+    <p id="milestones"></p>
+    <div id="puppyholder"></div>
+    <img id="cute" height="400" width ="400" class="hidden">
     <p id="neededForDay"></p>
     <p>Words needed per day:</p>
     <div id="wordsNeeded"></div>
