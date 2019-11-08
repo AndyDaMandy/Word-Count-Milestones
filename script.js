@@ -106,19 +106,11 @@ document.getElementById("wordsNeeded").innerHTML = str;
 };
 
 // These functions show the days in and save it
-let originalDate = 0;
 let todaysDate = window.localStorage.getItem("date");
 
 function saveDate(){
-  originalDate = document.getElementById("currentDay").value;
+ let originalDate = document.getElementById("currentDay").value;
   window.localStorage.setItem("date", originalDate.toString());
-};
-
-function checkDate(){
-  let newDate = parseInt(todaysDate);
-  if (newDate !== 0){
-    showDate();
-  }
 };
 
 function showDate(){
@@ -127,6 +119,8 @@ function showDate(){
   parseInt(showingDate);
   document.getElementById('daysIn').innerHTML = "Days In: " + showingDate;
 };
+//Toggle will return true or false if you hit your wordcount
+// If the wordcount has been hit at least, then you'll get the pup.
 
 // Checking the dates for winners is up next
 function winner(){
@@ -147,18 +141,22 @@ function winner(){
 // Each milestone be every 5k. I.E. you get a "prize" for hitting 10k, 15k, 20k, etc.
 // I'll probably put an upper limit of some sort. Not sure what kind, but it'll happen. 
 // The reward will consist probably of styling OR pictures of cute dogs
+// Toggle will only activate
+
 function fiveK(){
   document.getElementById('milestones').innerHTML = "";
-  let checkinterval = Math.round(wordCount / 5000);
+  let checkinterval = Math.floor(wordCount / 5000);
   let five = checkinterval * 5000;
   if (wordCount >= targeted) {
     document.getElementById('milestones').innerHTML = "Congratulations on finishing! you hit your target word count! Buy yourself a drink! You deserve it!";
     pushPup();
-  } else if (wordCount >= 5000){
+    
+  } else if (wordCount >= five && wordCount > 5000){
   document.getElementById('milestones').innerHTML = "You hit " + five + " words! Congratulations! Keep it up! Here's a puppy!";
     pushPup();
   } else {
     document.getElementById('cute').src = "";
+    document.getElementById('cute').ClassList = "hidden";
   };
 
 };
@@ -199,13 +197,21 @@ function pushPup(){
 // This removes the "hidden" class from the img element.
   document.getElementById('cute').classList = "";
   // The randomPup object should only be 100 items, so this pulls a random item from 1-100.
-  // It could be good to re-roll if it loads something wrong..
-document.getElementById('cute').src = randomPup.data[Math.floor(Math.random() * 201) - 100].link;
+document.getElementById('cute').src = randomPup.data[Math.floor(Math.random() * 100 ) + 1].link;
 };
 
 // I'd love to find a way to get the image to load before it appears.
 // Or to have it queued up before the next change. Maybe have a second one ready? I.E. two variables....hrmmmm
 // Might require some playing around with regarding the order of operations.
-// 
+
+
+// Possible things to clean up:
+// Setting it up so cases like -100 aren't allowed.
+// Maybe the default value can = 50000
+// Then if someone puts something stupid, they get an alert
+// and then the input resets to 50000
+// I can also change it so that the challenge can be more or less days
+// Right now I only reward at milestones, but rewards at wordcounts would be nice...
+// And that's that!
 
 //
