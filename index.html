@@ -6,19 +6,23 @@
     <title>repl.it</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
-  <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); showDate();">
-    <h1>Write a novel in 30 days - Word Count Site<h2>
-      <p>What's your target word count at the end of 30 days? I suggest 50k</p>
-      <input type="number" id="target" onchange="askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget'))); final(); winner();"></input>
+  <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays); final(); showDate(); showSaved(); showChallenge();">
+    <h1>Write a novel in XX days - Word Count Site!<h2>
+       <p>What's your target word count at the end of this challenge? I suggest 50k</p>     
+      <input type="number" id="target"  min="1" onchange="validate2(); askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays); showSaved(); final(); winner();"></input>
       <input type="submit">
       <p id="finalTarget"></p>
+      <p>How many days do you want the challenge to be for? I suggest 30 days.</p>
+       <input type="number" id="challenge" min="1" onchange="validate3(); changeDays(); showChallenge(); final();"></input>
+      <input type="submit"></input>
+      <p id="challenger"></p>    
       <p>What's your current word count?</p>
-    <input type="number" id="wordCount" onchange="updateCount(); checkSaved(); saveDate(); showDate(); winner(); fiveK();"></input>
+    <input type="number" id="wordCount" min="0" onchange="validate(); updateCount(); checkSaved(); saveDate(); showDate(); winner(); showSaved(); final(); fiveK();"></input>
     <input type="submit">
     <p>Your current word count is:</p>
     <p id="total"></p>
     <p>How many days in are you?</p>
-    <input type="number" id="currentDay" onchange="saveDate(); saveDate(); showDate(); winner(); fiveK();"></input>
+    <input type="number" id="currentDay" min="1" onchange="validate4(); saveDate(); saveDate(); showDate(); winner(); fiveK();"></input>
     <input type="submit" ></input>
     <p id="daysIn"></p>
     <p id="goodJob"></p>
@@ -26,9 +30,13 @@
     <p id="milestones"></p>
     <div id="puppyholder"></div>
     <img id="cute" width ="400" class="hidden">
+    <p>Input History:</p>
+    <p id="inputHistory"></p>
+    <button onclick="clearHistory();">Clear History</button>
     <p id="neededForDay"></p>
     <p>Words needed per day:</p>
     <div id="wordsNeeded"></div>
+    <button onclick="clearAll(); window.location.reload();">Clear all saved data</button>
     <script src="script.js"></script>
   </body>
 </html>
