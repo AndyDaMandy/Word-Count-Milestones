@@ -8,11 +8,16 @@ let wordCount = 0;
 let target = 0;
 let targeted = window.localStorage.getItem('savedTarget');
 let saved = window.localStorage.getItem('savedCount');
-
+// savedInputs will save wordcount history into an array.
+// The function showSaved will then display that array.
+// I'm not sure if I want to add funcitonality beyond that.
+let savedInputs = [];
 // functions regarding word count go here
 function updateCount(){
   wordCount = document.getElementById("wordCount").value;
   window.localStorage.setItem("savedCount", wordCount.toString());
+  savedInputs.push(wordCount);
+  window.localStorage.setItem("savedTotal", savedInputs.toString());
 };
 function displayCount(){
   let total = saved.toString();
@@ -24,18 +29,30 @@ function checkSaved(){
   if (savedCount !== 0){
     displayCount();
   };
-}
-/*
-function dayTargets(){
-  let arrayofStrings = [];
-  for (let i = 1; i <= 30; i++){
-    arrayofStrings.push("Day " i " - " + i * 1667);
-  }
-  for (let b = 0; b <= arrayofStrings.length; b++){
-   document.getElementById('targets').innerHTML
-  }
 };
-*/
+
+function showSaved(){
+  let newSaved = window.localStorage.getItem("savedTotal");
+  let testArr = newSaved.split(",");
+  let counter = 1;
+  let finalArr = [];
+  for (let h = 0; h < testArr.length; h++){
+    finalArr.push(" Entry " + counter + ": " + testArr[h]); 
+    counter++;
+  };
+  
+if (finalArr != null){
+  document.getElementById('inputHistory').innerHTML = finalArr; 
+}
+};
+
+function clearHistory(){
+  window.localStorage.removeItem("savedTotal");
+  document.getElementById('inputHistory').innerHTML = "";
+};
+function clearAll(){
+  window.localStorage.clear();
+};
 
 // Functions regarding targets go here
 
@@ -54,7 +71,7 @@ if (savedTarget !== 0){
 
 function displayTarget (){
   let finalTarget = targeted.toString();
-  document.getElementById('finalTarget').innerHTML = finalTarget;
+  document.getElementById('finalTarget').innerHTML = finalTarget + " word target";
 };
 
 // stuff related to words per day go here
@@ -65,28 +82,41 @@ function displayTarget (){
 // It the needs to check for milestones.
 // It possibly needs to be able to check dates and see if you're on track
 let wordsPerDay = 0;
-function wordsPerDayF(x){
-wordsPerDay = x / 30;
+function wordsPerDayF(x, z){
+wordsPerDay = x / z;
 wordsPerDay = Math.round(wordsPerDay)
 document.getElementById('wordsNeeded').innerHTML = wordsPerDay.toString();
 };
 
-// wordsPerDay(parseInt(window.localStorage.getItem('savedTarget')));
-// This function above is how we're going to pull the data from the target
-// I think I can also add 
+let totalDays = parseInt(window.localStorage.getItem('challenge'));
+
+function changeDays(){
+  totalDays = document.getElementById('challenge').value;
+  window.localStorage.setItem('challenge', totalDays.toString());
+};
+function showChallenge(){
+  let updatedDays = window.localStorage.getItem('challenge');
+  updatedDays = parseInt(updatedDays);
+  document.getElementById('challenger').innerHTML = updatedDays + " Day Challenge";
+};
+// wordsPerDay(parseInt(window.localStorage.getItem('savedTarget')), totalDays);
+// This function above is how we're going to pull the data from the target. It'll show up in the HTML
 
 //Next up is milestones
 // It needs to see if you hit a milestone or not...
 // The ul tags calendar need to create list elements containing an approximate day count
 let milestones = []
 let finalMilestones = [];
-function createMilestones(){
+//daysNum MUST equal totalDays. totalDays will be updated via a new fuction.
+//Words per day nees two parameters now, with one being totalDays as well.
+//Create milestones is called via the final() function. It MUST have totalDays as the parameter to work.
+function createMilestones(daysNum){
   let newWordCount = wordsPerDay;
-for (let w = 1; w <= 30; w++){
+for (let w = 1; w <= daysNum; w++){
   milestones.push(newWordCount * w)
 };
 let count = 1;
-for (let z = 0; z < milestones.length; z++){
+for (let z = 0; z < daysNum; z++){
   finalMilestones.push("Day " + count + ": " + milestones[z]);
   count++;
 };
@@ -95,8 +125,8 @@ function final(){
 document.getElementById("wordsNeeded").innerHTML = "";
 milestones = [];
 finalMilestones = [];
-wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')));
-createMilestones();
+wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays);
+createMilestones(totalDays);
 let str = '<ul>'
 finalMilestones.forEach(function(item) {
   str += '<li>'+ item + '</li>';
@@ -125,16 +155,17 @@ function showDate(){
 // Checking the dates for winners is up next
 function winner(){
   document.getElementById('goodJob').innerHTML = "";
-  let checkWinner = wordsPerDay * todaysDate;
-  let checkRemainder = checkWinner - saved;
+  let checkWinner = wordsPerDay * parseInt(todaysDate);
+  let checkRemainder = checkWinner - parseInt(saved);
   document.getElementById('remainder').innerHTML = "";
-  if (saved  >= checkWinner){
+  if (parseInt(saved)  >= checkWinner){
     document.getElementById('goodJob').innerHTML = "Good Job hitting your word count! You're the best!";
     document.getElementById('remainder').innerHTML = "Words over: " + Math.abs(checkRemainder);
-  } else {
+  } else if (isNaN(checkRemainder) == false) {
     document.getElementById('remainder').innerHTML = "Words left to go: " + checkRemainder;
     document.getElementById('goodJob').innerHTML = "Still got more to go! Keep on going!"
-
+  } else {
+    document.getElementById('remainder').innerHTML = "";
   }
 };
 // This next section will reward with milestones
@@ -147,11 +178,11 @@ function fiveK(){
   document.getElementById('milestones').innerHTML = "";
   let checkinterval = Math.floor(wordCount / 5000);
   let five = checkinterval * 5000;
-  if (wordCount >= targeted) {
+  if (parseInt(wordCount) >= parseInt(targeted)) {
     document.getElementById('milestones').innerHTML = "Congratulations on finishing! you hit your target word count! Buy yourself a drink! You deserve it!";
     pushPup();
     
-  } else if (wordCount >= five && wordCount > 5000){
+  } else if (wordCount >= five && wordCount >= 5000){
   document.getElementById('milestones').innerHTML = "You hit " + five + " words! Congratulations! Keep it up! Here's a puppy!";
     pushPup();
   } else {
@@ -200,17 +231,69 @@ function pushPup(){
 document.getElementById('cute').src = randomPup.data[Math.floor(Math.random() * 100 ) + 1].link;
 };
 
+//Validation functions below: They check if a positive number is input.
+//For wordcount and days in, it'll first check if there's local storage and revert the invalid input to the local item.
+// This way, if someone accidentally puts in a decimal, it'll still hold your previous value.
+// This doesn't prevent accidentally going too high or too low. I'm not sure what to do with that one...
+
+function validate(){
+  validator1 = document.getElementById('wordCount').value;
+  if (validator1 > 0 && validator1 % 1 === 0){
+    return true;
+  } else {
+    alert("Pick something greater than 0 dude! Also no decimals! I'm putting in your last saved value or if you don't have one, setting it to 1 word (lol). Feel free to change it.");
+    if (window.localStorage.getItem("savedCount") === null){
+      document.getElementById('wordCount').value = 1;
+    } else {
+    document.getElementById('wordCount').value = window.localStorage.getItem("savedCount");
+  };
+}
+};
+function validate2(){
+  validator2 = document.getElementById('target').value;
+  if (validator2 > 0 && validator2 % 1 === 0){
+    return true;
+  } else {
+    alert("Pick something greater than 0 dude! Also no decimals! I'm putting in 50k, feel free to change it.");
+    document.getElementById('target').value = 50000;
+  }
+};
+
+function validate3(){
+  validator3 = document.getElementById('challenge').value;
+  if (validator3 > 0 && validator3 % 1 === 0){
+    return true;
+  } else {
+    alert("Pick something greater than 0 dude! Also no decimals! I'm starting you at 30 days, feel free to change it.");
+    document.getElementById('challenge').value = 30;
+  }
+};
+
+function validate4(){
+  validator4 = document.getElementById('currentDay').value;
+  if (validator4 > 0 && validator4 % 1 === 0){
+    return true;
+  } else {
+    alert("Pick something greater than 0 dude! Also no decimals! I'm putting in your last saved date or if you don't have one, I'm setting it to one. Feel free to change it.");
+    if (window.localStorage.getItem("date") === null){
+      document.getElementById('currentDay').value = 1;
+    } else {
+    document.getElementById('currentDay').value = window.localStorage.getItem("date");
+    }
+  };
+};
+
+
 // I'd love to find a way to get the image to load before it appears.
 // Or to have it queued up before the next change. Maybe have a second one ready? I.E. two variables....hrmmmm
 // Might require some playing around with regarding the order of operations.
 
 
 // Possible things to clean up:
-// Setting it up so cases like -100 aren't allowed.
-// Maybe the default value can = 50000
-// Then if someone puts something stupid, they get an alert
-// and then the input resets to 50000
-// I can also change it so that the challenge can be more or less days
+// Setting it up so cases like -100 aren't allowed. Done!
+// Maybe the default value can = 50000. Sorta done! I don't wanna be too restrctive.
+// Then if someone puts something stupid, they get an alert Done!
+// I can also change it so that the challenge can be more or less days. Done!
 // Right now I only reward at milestones, but rewards at wordcounts would be nice...
 // And that's that!
 
