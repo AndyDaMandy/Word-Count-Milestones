@@ -1,4 +1,5 @@
 # Word-Count-Milestones
+
 This site calculates your word count milestones for any project you might be working on.
 
 It's super simple. All you need to do is input your goals and it'll save them! 
