@@ -3,26 +3,29 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
+    <title>Word Count Milestone Tracker</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   </head>
   <body onload="checkSaved(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays); final(); showDate(); showSaved(); showChallenge();">
-    <h1>Write a novel in XX days - Word Count Site!<h2>
+    <h1>Write a novel in 30 days - Word Count Site!<h2>
        <p>What's your target word count at the end of this challenge? I suggest 50k</p>     
-      <input type="number" id="target"  min="1" onchange="validate2(); askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays); showSaved(); final(); winner();"></input>
+      <input placeholder="50000" type="number" id="target"  min="1" onchange="validate2(); askTarget(); checkTarget(); wordsPerDayF(parseInt(window.localStorage.getItem('savedTarget')), totalDays); showSaved(); final(); winner();"></input>
       <input type="submit">
       <p id="finalTarget"></p>
       <p>How many days do you want the challenge to be for? I suggest 30 days.</p>
-       <input type="number" id="challenge" min="1" onchange="validate3(); changeDays(); showChallenge(); final();"></input>
+       <input placeholder="30" type="number" id="challenge" min="1" onchange="validate3(); changeDays(); showChallenge(); final();"></input>
       <input type="submit"></input>
       <p id="challenger"></p>    
-      <p>What's your current word count?</p>
-    <input type="number" id="wordCount" min="0" onchange="validate(); updateCount(); checkSaved(); saveDate(); showDate(); winner(); showSaved(); final(); fiveK();"></input>
+      <p>What's your current word count? Start with 1 please!</p>
+    <input placeholder="1" type="number" id="wordCount" min="0" onchange="validate(); updateCount(); checkSaved(); saveDate(); showDate(); winner(); showSaved(); final(); fiveK();"></input>
     <input type="submit">
     <p>Your current word count is:</p>
     <p id="total"></p>
-    <p>How many days in are you?</p>
-    <input type="number" id="currentDay" min="1" onchange="validate4(); saveDate(); saveDate(); showDate(); winner(); fiveK();"></input>
+    <p>How many days in are you? Starting today, would be 1</p>
+    <input placeholder="1" type="number" id="currentDay" min="1" onchange="validate4(); saveDate(); saveDate(); showDate(); winner(); fiveK();"></input>
     <input type="submit" ></input>
     <p id="daysIn"></p>
     <p id="goodJob"></p>
