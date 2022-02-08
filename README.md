@@ -1,8 +1,5 @@
 # Word-Count-Milestones
 
-Try it out on codepen.io!
-https://codepen.io/AndyDaMandy/full/dyZXbRL
-
 This site calculates your word count milestones for any project you might be working on.
 
 It's super simple. All you need to do is input your goals and it'll save them! 
